@@ -56,30 +56,61 @@ class Field {
       console.log("YOU WIN! YOU ARE A WINNER!");
     }
   }
-  static generateField(x,y){
+ static generateField(x,y){
     var newRandomField = [];
     var totalSpaces = 0;
     for(let i = 0; i<x;i++){
       newRandomField.push([])
       for(let j =0; j<y;j++){
-        newRandomField[i].push('░');
+        newRandomField[i].push('O');
         totalSpaces++;
       }
     }
-    var holes = Math.floor(totalSpaces * 0.45);
-    for(let i =0;i<holes;){
-      let attemptedHoleX = Math.floor(Math.random()*x);
-      let attemptedHoleY = Math.floor(Math.random()*y);
-     if( newRandomField[attemptedHoleX][attemptedHoleY] == '░'){
-       newRandomField[attemptedHoleX][attemptedHoleY] = 'O';
+    var walkingSpaces = Math.floor(totalSpaces * 0.45);
+    var initialPositionGroundX = 0;
+    var initialPositionGroundY = 0;
+    var i = 0;
+    newRandomField[initialPositionGroundX][initialPositionGroundY] = '*';
+     while(i < walkingSpaces){
+      if(Math.random() <= .7){
+	      if(Math.round(Math.random())==0){
+	        initialPositionGroundX--;
+	        if (initialPositionGroundX < 0){
+	          initialPositionGroundX = 1;
+	        };
+        } 
+        else {
+          initialPositionGroundX++; 
+          if (initialPositionGroundX >= x){
+            initialPositionGroundX = initialPositionGroundX - 2;
+          };
+        };
+      } 
+      else{
+        if(Math.round(Math.random())==0){
+	        initialPositionGroundY--;
+	        if (initialPositionGroundY < 0){
+	          initialPositionGroundY = 1;
+	        };
+        } 
+        else {
+          initialPositionGroundY++; 
+          if (initialPositionGroundY >= y){
+            initialPositionGroundY = initialPositionGroundY - 2;
+          };
+        };
+      };
+     if (newRandomField[initialPositionGroundX][initialPositionGroundY]=='O'){
+       newRandomField[initialPositionGroundX][initialPositionGroundY] ="░";
        i++;
+       if(i==walkingSpaces){
+          newRandomField[initialPositionGroundX][initialPositionGroundY] ="^";
+       }
      };
-    };
-    newRandomField[Math.floor(Math.random()*x)][Math.floor(Math.random()*y)] = "^";
-    newRandomField[Math.floor(Math.random()*x)][Math.floor(Math.random()*y)] = "*";
-    return newRandomField;
+     };
+     return newRandomField;
   };
-}
+};
 const myField = new Field(Field.generateField(8,4));
 myField.print();
 myField.askForMove();
